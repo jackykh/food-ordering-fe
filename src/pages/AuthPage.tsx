@@ -16,7 +16,7 @@ export default function AuthPage() {
     mutationFn: authApi.signup,
     onSuccess: (data) => {
       setAuth(data.userId, data.userName);
-      navigate("/");
+      navigate("/menu");
     },
     onError: (error: unknown) => {
       if (axios.isAxiosError(error)) {
@@ -34,7 +34,7 @@ export default function AuthPage() {
     mutationFn: authApi.login,
     onSuccess: (data) => {
       setAuth(data.userId, data.userName);
-      navigate("/");
+      navigate("/menu");
     },
     onError: (error: unknown) => {
       if (axios.isAxiosError(error)) {
