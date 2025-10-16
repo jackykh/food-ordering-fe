@@ -24,7 +24,7 @@ export default function HomePage() {
             </div>
             <button
               onClick={handleLogout}
-              className="bg-red-500 hover:bg-red-600 active:bg-red-700 text-white px-4 py-2 rounded-lg transition self-start sm:self-auto"
+              className="bg-red-500 hover:bg-red-600 active:bg-red-700 text-white px-4 py-2 rounded-lg transition self-start sm:self-auto cursor-pointer"
             >
               Logout
             </button>
