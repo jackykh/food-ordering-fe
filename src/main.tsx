@@ -6,6 +6,13 @@ import AuthPage from "./pages/AuthPage";
 import HomePage from "./pages/HomePage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import "./index.css";
+import MenuPage from "./pages/MenuPage";
+
+// Mock APIs in development mode
+if (import.meta.env.DEV) {
+  import("./api/mock/authApi");
+  import("./api/mock/menuApi");
+}
 
 const queryClient = new QueryClient();
 
@@ -19,6 +26,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <HomePage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/menu",
+    element: (
+      <ProtectedRoute>
+        <MenuPage />
       </ProtectedRoute>
     ),
   },

@@ -1,15 +1,13 @@
-import MockAdapter from "axios-mock-adapter";
-import axios from "axios";
-
-// Create Mock Adapter instance
-const mock = new MockAdapter(axios, { delayResponse: 500 }); // optional delay for realism
+import API_BASE_URL from "@/utils/constant";
+import mock from "./lib/mockAdapter";
 
 // In-memory user storage
-const users: { [key: string]: { userId: string; userName: string } } = {};
-let userIdCounter = 1;
+const mockUsers: { [key: string]: { userId: string; userName: string } } = {
+  user_1: { userId: "user_1", userName: "TestUser1" },
+  user_2: { userId: "user_2", userName: "TestUser2" },
+};
 
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || "http://localhost:3000/api";
+let userIdCounter = 3;
 
 // Mock user registration API
 mock.onPost(`${API_BASE_URL}/auth/signup`).reply((config) => {
@@ -20,8 +18,7 @@ mock.onPost(`${API_BASE_URL}/auth/signup`).reply((config) => {
       return [400, { message: "Username is required" }];
     }
 
-    // Check if userName already exists
-    const existingUser = Object.values(users).find(
+    const existingUser = Object.values(mockUsers).find(
       (user) => user.userName.toLowerCase() === userName.toLowerCase()
     );
 
@@ -29,13 +26,12 @@ mock.onPost(`${API_BASE_URL}/auth/signup`).reply((config) => {
       return [409, { message: "Username already exists" }];
     }
 
-    // Create new user
     const userId = `user_${userIdCounter++}`;
     const newUser = { userId, userName };
-    users[userId] = newUser;
+    mockUsers[userId] = newUser;
 
     console.log("✅ Registration successful:", newUser);
-    console.log("📊 Current user list:", users);
+    console.log("📊 Current user list:", mockUsers);
 
     return [200, newUser];
   } catch (error: unknown) {
@@ -57,8 +53,7 @@ mock.onPost(`${API_BASE_URL}/auth/login`).reply((config) => {
       return [400, { message: "Username is required" }];
     }
 
-    // Find user by userName
-    const user = Object.values(users).find(
+    const user = Object.values(mockUsers).find(
       (user) => user.userName.toLowerCase() === userName.toLowerCase()
     );
 
@@ -78,22 +73,5 @@ mock.onPost(`${API_BASE_URL}/auth/login`).reply((config) => {
     return [500, { message: "Internal server error" }];
   }
 });
-
-// Function to seed initial test users
-const seedUsers = () => {
-  const testUsers = [
-    { userId: "user_1", userName: "TestUser1" },
-    { userId: "user_2", userName: "TestUser2" },
-  ];
-
-  testUsers.forEach((user) => {
-    users[user.userId] = user;
-  });
-
-  userIdCounter = testUsers.length + 1;
-  console.log("🌱 Initialized test users:", users);
-};
-
-seedUsers();
 
 export default mock;

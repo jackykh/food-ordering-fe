@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
 import { authApi } from "../api/auth";
@@ -38,6 +38,7 @@ export default function AuthPage() {
     },
     onError: (error: unknown) => {
       if (axios.isAxiosError(error)) {
+        console.log(error);
         setError(
           error.response?.data?.message || "Login failed. Please try again."
         );
@@ -64,6 +65,12 @@ export default function AuthPage() {
   };
 
   const isPending = isLoginPending || isSignupPending;
+
+  useEffect(() => {
+    if (useAuthStore.getState().isAuthenticated) {
+      navigate("/");
+    }
+  }, [navigate]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 to-red-50 flex items-center justify-center p-4">

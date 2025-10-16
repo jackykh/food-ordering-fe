@@ -1,11 +1,5 @@
 import axios from "axios";
-
-if (import.meta.env.DEV) {
-  import("./mockApi");
-}
-
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || "http://localhost:3000/api";
+import API_BASE_URL from "@/utils/constant";
 
 export interface SignupRequest {
   userName: string;
@@ -26,6 +20,8 @@ export const authApi = {
   },
 
   login: async (data: SignupRequest): Promise<SignupResponse> => {
+    console.log("Logging in with data:", data);
+    console.log("POST URL:", `${API_BASE_URL}/auth/login`);
     const response = await axios.post<SignupResponse>(
       `${API_BASE_URL}/auth/login`,
       data
