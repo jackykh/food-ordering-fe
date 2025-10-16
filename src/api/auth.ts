@@ -20,8 +20,6 @@ export const authApi = {
   },
 
   login: async (data: SignupRequest): Promise<SignupResponse> => {
-    console.log("Logging in with data:", data);
-    console.log("POST URL:", `${API_BASE_URL}/auth/login`);
     const response = await axios.post<SignupResponse>(
       `${API_BASE_URL}/auth/login`,
       data
