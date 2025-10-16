@@ -1,5 +1,9 @@
 import axios from "axios";
 
+if (import.meta.env.DEV) {
+  import("./mockApi");
+}
+
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL || "http://localhost:3000/api";
 
