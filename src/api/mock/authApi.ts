@@ -1,5 +1,5 @@
 import API_BASE_URL from "@/utils/constant";
-import mock from "./lib/mockAdapter";
+import mock from "@/lib/mockAdapter";
 
 // In-memory user storage
 const mockUsers: { [key: string]: { userId: string; userName: string } } = {

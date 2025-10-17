@@ -1,6 +1,6 @@
 import { menuItems } from "./data/menu";
 import API_BASE_URL from "@/utils/constant";
-import mock from "./lib/mockAdapter";
+import mock from "@/lib/mockAdapter";
 
 // GET /api/menu - Get all menu items
 mock.onGet(`${API_BASE_URL}/menu`).reply(() => {
