@@ -2,9 +2,9 @@ import API_BASE_URL from "@/utils/constant";
 import mock from "@/lib/mockAdapter";
 
 // In-memory user storage
-const mockUsers: { id: number; name: string }[] = [
-  { id: 1, name: "TestUser1" },
-  { id: 2, name: "TestUser2" },
+const mockUsers: { userId: number; userName: string }[] = [
+  { userId: 1, userName: "TestUser1" },
+  { userId: 2, userName: "TestUser2" },
 ];
 
 let userIdCounter = mockUsers.length + 1;
@@ -30,7 +30,7 @@ mock.onPost(`${API_BASE_URL}/auth/signup`).reply((config) => {
     }
 
     const existingUser = Object.values(mockUsers).find(
-      (user) => user.name.toLowerCase() === userName.toLowerCase()
+      (user) => user.userName.toLowerCase() === userName.toLowerCase()
     );
 
     if (existingUser) {
@@ -49,7 +49,7 @@ mock.onPost(`${API_BASE_URL}/auth/signup`).reply((config) => {
     }
 
     const userId = userIdCounter++;
-    const newUser = { id: userId, name: userName };
+    const newUser = { userId, userName };
     mockUsers.push(newUser);
 
     console.log("✅ Registration successful:", newUser);
@@ -101,7 +101,7 @@ mock.onPost(`${API_BASE_URL}/auth/login`).reply((config) => {
     }
 
     const user = Object.values(mockUsers).find(
-      (user) => user.name.toLowerCase() === userName.toLowerCase()
+      (user) => user.userName.toLowerCase() === userName.toLowerCase()
     );
 
     if (!user) {
