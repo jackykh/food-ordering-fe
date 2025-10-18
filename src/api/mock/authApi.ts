@@ -2,20 +2,31 @@ import API_BASE_URL from "@/utils/constant";
 import mock from "@/lib/mockAdapter";
 
 // In-memory user storage
-const mockUsers: { [key: string]: { userId: string; userName: string } } = {
-  user_1: { userId: "user_1", userName: "TestUser1" },
-  user_2: { userId: "user_2", userName: "TestUser2" },
-};
+const mockUsers: { userId: number; userName: string }[] = [
+  { userId: 1, userName: "TestUser1" },
+  { userId: 2, userName: "TestUser2" },
+];
 
-let userIdCounter = 3;
+let userIdCounter = mockUsers.length + 1;
 
 // Mock user registration API
 mock.onPost(`${API_BASE_URL}/auth/signup`).reply((config) => {
   try {
-    const { userName } = JSON.parse(config.data);
+    const userName = config.params.user_name;
 
     if (!userName || userName.trim().length === 0) {
-      return [400, { message: "Username is required" }];
+      return [
+        400,
+        {
+          detail: [
+            {
+              loc: [undefined, "user_name"],
+              msg: "Username is required",
+              type: "value_error",
+            },
+          ],
+        },
+      ];
     }
 
     const existingUser = Object.values(mockUsers).find(
@@ -23,34 +34,70 @@ mock.onPost(`${API_BASE_URL}/auth/signup`).reply((config) => {
     );
 
     if (existingUser) {
-      return [409, { message: "Username already exists" }];
+      return [
+        409,
+        {
+          detail: [
+            {
+              loc: [undefined, "user_name"],
+              msg: "Username already exists",
+              type: "value_error",
+            },
+          ],
+        },
+      ];
     }
 
-    const userId = `user_${userIdCounter++}`;
+    const userId = userIdCounter++;
     const newUser = { userId, userName };
-    mockUsers[userId] = newUser;
+    mockUsers.push(newUser);
 
     console.log("✅ Registration successful:", newUser);
     console.log("📊 Current user list:", mockUsers);
 
-    return [200, newUser];
+    return [
+      200,
+      { success: true, message: "Registration successful", data: newUser },
+    ];
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.error("❌ Registration failed:", error.message);
     } else {
       console.error("❌ Registration failed:", error);
     }
-    return [500, { message: "Internal server error" }];
+    return [
+      500,
+      {
+        detail: [
+          {
+            loc: [undefined, "internal"],
+            msg: "Internal server error",
+            type: "internal_server_error",
+          },
+        ],
+      },
+    ];
   }
 });
 
 // Mock user login API
 mock.onPost(`${API_BASE_URL}/auth/login`).reply((config) => {
   try {
-    const { userName } = JSON.parse(config.data);
+    const userName = config.params.user_name;
 
     if (!userName || userName.trim().length === 0) {
-      return [400, { message: "Username is required" }];
+      return [
+        400,
+        {
+          detail: [
+            {
+              loc: [undefined, "user_name"],
+              msg: "Username is required",
+              type: "value_error",
+            },
+          ],
+        },
+      ];
     }
 
     const user = Object.values(mockUsers).find(
@@ -58,19 +105,41 @@ mock.onPost(`${API_BASE_URL}/auth/login`).reply((config) => {
     );
 
     if (!user) {
-      return [404, { message: "User not found, please register" }];
+      return [
+        404,
+        {
+          detail: [
+            {
+              loc: [undefined, "user_name"],
+              msg: "User not found, please register",
+              type: "value_error",
+            },
+          ],
+        },
+      ];
     }
 
     console.log("✅ Login successful:", user);
 
-    return [200, user];
+    return [200, { success: true, message: "Login successful", data: user }];
   } catch (error) {
     if (error instanceof Error) {
       console.error("❌ Login failed:", error.message);
     } else {
       console.error("❌ Login failed:", error);
     }
-    return [500, { message: "Internal server error" }];
+    return [
+      500,
+      {
+        detail: [
+          {
+            loc: [undefined, "internal"],
+            msg: "Internal server error",
+            type: "internal_server_error",
+          },
+        ],
+      },
+    ];
   }
 });
 
