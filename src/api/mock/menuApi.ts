@@ -18,7 +18,7 @@ mock.onGet(`${API_BASE_URL}/menu`).reply(() => {
 // GET /api/menu/:id - Get menu item by ID
 mock.onGet(new RegExp(`${API_BASE_URL}/menu/.*`)).reply((config) => {
   const id = config.url?.split("/").pop();
-  const item = menuItems.find((item) => item.id === id);
+  const item = menuItems.find((item) => item.id === Number(id));
 
   if (item) {
     console.log("Getting menu item:", item);
