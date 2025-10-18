@@ -1,5 +1,4 @@
-import axios from "axios";
-import API_BASE_URL from "@/utils/constant";
+import axiosInstance from "@/lib/axios";
 
 export interface SignupRequest {
   userName: string;
@@ -12,16 +11,16 @@ export interface SignupResponse {
 
 export const authApi = {
   signup: async (data: SignupRequest): Promise<SignupResponse> => {
-    const response = await axios.post<SignupResponse>(
-      `${API_BASE_URL}/auth/signup`,
+    const response = await axiosInstance.post<SignupResponse>(
+      "/auth/signup",
       data
     );
     return response.data;
   },
 
   login: async (data: SignupRequest): Promise<SignupResponse> => {
-    const response = await axios.post<SignupResponse>(
-      `${API_BASE_URL}/auth/login`,
+    const response = await axiosInstance.post<SignupResponse>(
+      "/auth/login",
       data
     );
     return response.data;
