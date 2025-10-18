@@ -5,15 +5,24 @@ export interface SignupRequest {
 }
 
 export interface SignupResponse {
-  userId: string;
-  userName: string;
+  success: boolean;
+  message: string;
+  data: {
+    id: number;
+    name: string;
+  };
 }
 
 export const authApi = {
   signup: async (data: SignupRequest): Promise<SignupResponse> => {
     const response = await axiosInstance.post<SignupResponse>(
       "/auth/signup",
-      data
+      data,
+      {
+        params: {
+          user_name: data.userName,
+        },
+      }
     );
     return response.data;
   },
@@ -21,7 +30,12 @@ export const authApi = {
   login: async (data: SignupRequest): Promise<SignupResponse> => {
     const response = await axiosInstance.post<SignupResponse>(
       "/auth/login",
-      data
+      data,
+      {
+        params: {
+          user_name: data.userName,
+        },
+      }
     );
     return response.data;
   },

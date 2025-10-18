@@ -2,10 +2,10 @@ import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
 interface AuthState {
-  userId: string | null;
+  userId: number | null;
   userName: string | null;
   isAuthenticated: boolean;
-  setAuth: (userId: string, userName: string) => void;
+  setAuth: (userId: number, userName: string) => void;
   logout: () => void;
   checkAuth: () => void;
 }

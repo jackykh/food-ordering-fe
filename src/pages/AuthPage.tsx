@@ -15,13 +15,14 @@ export default function AuthPage() {
   const { mutate: signup, isPending: isSignupPending } = useMutation({
     mutationFn: authApi.signup,
     onSuccess: (data) => {
-      setAuth(data.userId, data.userName);
+      const { id, name } = data.data;
+      setAuth(id, name);
       navigate("/menu");
     },
     onError: (error: unknown) => {
       if (axios.isAxiosError(error)) {
         setError(
-          error.response?.data?.message ||
+          error.response?.data?.detail[0].msg ||
             "Registration failed. Please try again."
         );
       } else {
@@ -33,14 +34,16 @@ export default function AuthPage() {
   const { mutate: login, isPending: isLoginPending } = useMutation({
     mutationFn: authApi.login,
     onSuccess: (data) => {
-      setAuth(data.userId, data.userName);
+      const { id, name } = data.data;
+      setAuth(id, name);
       navigate("/menu");
     },
     onError: (error: unknown) => {
       if (axios.isAxiosError(error)) {
         console.log(error);
         setError(
-          error.response?.data?.message || "Login failed. Please try again."
+          error.response?.data?.detail[0].msg ||
+            "Login failed. Please try again."
         );
       } else {
         setError("Login failed. Please try again.");
