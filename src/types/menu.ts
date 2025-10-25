@@ -13,3 +13,10 @@ export interface MenuCategory {
   name: string;
   items: MenuItem[];
 }
+
+// API Response Type
+export interface ApiResponse<T> {
+  success: boolean;
+  message: string;
+  data: T;
+}
