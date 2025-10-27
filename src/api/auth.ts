@@ -5,12 +5,12 @@ export interface SignupRequest {
   userName: string;
 }
 
-export interface userData {
+export interface UserData {
   id: number;
   name: string;
 }
 
-type SignupResponse = ApiResponse<userData>;
+type SignupResponse = ApiResponse<UserData>;
 
 export const authApi = {
   signup: async (data: SignupRequest): Promise<SignupResponse> => {
