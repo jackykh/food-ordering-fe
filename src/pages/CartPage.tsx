@@ -1,20 +1,16 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { useMutation } from "@tanstack/react-query";
-import { useCartStore } from "../stores/useCartStore";
 import { useAuthStore } from "../stores/useAuthStore";
 import { ordersApi } from "@/api/orders";
 import { cartApi } from "@/api/cart";
 import type { CartItem } from "@/types/cart";
 import { useCart } from "@/stores/useCart";
+import { getTotalPrice } from "@/utils";
 
 export default function CartPage() {
   const navigate = useNavigate();
-  const { isLoading, error, refetchCart } = useCart();
-  const cartItems = useCartStore((state) => state.items);
-  const getTotalPrice = useCartStore((state) => state.getTotalPrice);
-  const updateQuantity = useCartStore((state) => state.updateQuantity);
-  const clearCart = useCartStore((state) => state.clearCart);
+  const { cart, isLoading, error, refetchCart } = useCart();
   const userId = useAuthStore((state) => state.userId);
 
   const [fulfillmentType, setFulfillmentType] = useState<
@@ -35,6 +31,20 @@ export default function CartPage() {
     },
   });
 
+  // Update cart item quantity mutation
+  const { mutate: updateCartItemQuantity } = useMutation({
+    mutationFn: ({ itemId, quantity }: { itemId: number; quantity: number }) =>
+      cartApi.updateCartItem(userId!, itemId, quantity),
+    onSuccess: () => {
+      console.log("✅ Cart item quantity updated");
+      refetchCart(); // Refetch Cart Data
+    },
+    onError: (error) => {
+      console.error("❌ Failed to update quantity:", error);
+      alert("Failed to update cart item quantity");
+    },
+  });
+
   // Delete from cart mutation
   const { mutate: removeFromCart, isPending: isRemoving } = useMutation({
     mutationFn: (itemId: number) => cartApi.removeItemFromCart(userId!, itemId),
@@ -52,7 +62,7 @@ export default function CartPage() {
     mutationFn: () =>
       ordersApi.createOrder({
         user_id: userId!,
-        items: cartItems.map((item) => ({
+        items: cart.items.map((item) => ({
           item_id: item.items.id,
           quantity: item.quantity,
         })),
@@ -60,7 +70,7 @@ export default function CartPage() {
       }),
     onSuccess: () => {
       console.log("✅ Order submitted successfully");
-      clearCart();
+      refetchCart(); // Refetch Cart Data
       navigate("/");
     },
     onError: (error) => {
@@ -70,7 +80,7 @@ export default function CartPage() {
   });
 
   const handleSubmitOrder = () => {
-    if (cartItems.length === 0) {
+    if (cart.items.length === 0) {
       alert("Cart is empty");
       return;
     }
@@ -86,10 +96,13 @@ export default function CartPage() {
   const handleDecreaseQuantity = (cartItem: CartItem) => {
     if (cartItem.quantity > 1) {
       // If quantity is greater than 1, update local quantity
-      updateQuantity(cartItem.items.id, cartItem.quantity - 1);
+      updateCartItemQuantity({
+        itemId: cartItem.items.id,
+        quantity: cartItem.quantity - 1,
+      });
     } else {
       // If quantity is 1, remove the item
-      handleRemoveItem(cartItem.items.id);
+      removeFromCart(cartItem.items.id);
     }
   };
 
@@ -146,7 +159,7 @@ export default function CartPage() {
           </button>
         </div>
 
-        {cartItems.length === 0 ? (
+        {cart.items.length === 0 ? (
           <div className="bg-white rounded-lg shadow p-8 text-center">
             <p className="text-gray-600 mb-4">Your cart is empty</p>
             <button
@@ -160,7 +173,7 @@ export default function CartPage() {
           <>
             {/* Cart Items */}
             <div className="bg-white rounded-lg shadow mb-6">
-              {cartItems.map((cartItem) => (
+              {cart.items.map((cartItem) => (
                 <div
                   key={cartItem.items.id}
                   className="p-4 border-b last:border-b-0 flex gap-4"
@@ -254,13 +267,13 @@ export default function CartPage() {
               <div className="flex justify-between items-center mb-4 pb-4 border-b">
                 <span className="text-gray-600">Subtotal:</span>
                 <span className="font-semibold">
-                  ${getTotalPrice().toFixed(2)}
+                  ${getTotalPrice(cart.items).toFixed(2)}
                 </span>
               </div>
               <div className="flex justify-between items-center text-lg font-bold">
                 <span>Total:</span>
                 <span className="text-orange-500">
-                  ${getTotalPrice().toFixed(2)}
+                  ${getTotalPrice(cart.items).toFixed(2)}
                 </span>
               </div>
             </div>
@@ -292,7 +305,7 @@ export default function CartPage() {
               <p className="text-gray-600 mb-6">
                 Total Amount:{" "}
                 <span className="font-semibold text-orange-500">
-                  ${getTotalPrice().toFixed(2)}
+                  ${getTotalPrice(cart.items).toFixed(2)}
                 </span>
               </p>
               <div className="flex gap-4">

@@ -25,6 +25,18 @@ export const cartApi = {
     return response.data.data;
   },
 
+  updateCartItem: async (
+    userId: number,
+    itemId: number,
+    quantity: number
+  ): Promise<CartItem> => {
+    const response = await axiosInstance.put<ApiResponse<CartItem>>(
+      `/cart_item/${userId}/${itemId}`,
+      { quantity }
+    );
+    return response.data.data;
+  },
+
   removeItemFromCart: async (userId: number, itemId: number): Promise<void> => {
     await axiosInstance.delete(`/cart_item/${userId}/${itemId}`);
   },

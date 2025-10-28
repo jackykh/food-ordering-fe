@@ -1,9 +1,8 @@
 import { useState } from "react";
 import type { MenuItem as MenuItemType } from "../types/menu";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { cartApi } from "../api/cart";
 import { useAuthStore } from "../stores/useAuthStore";
-import { useCartStore } from "../stores/useCartStore";
 
 export default function MenuItem({
   id,
@@ -15,12 +14,12 @@ export default function MenuItem({
 }: MenuItemType) {
   const [isExpanded, setIsExpanded] = useState(false);
   const userId = useAuthStore((state) => state.userId);
-  const addItem = useCartStore((state) => state.addItem);
+  const queryClient = useQueryClient();
 
   const { mutate: addToCart, isPending } = useMutation({
     mutationFn: () => cartApi.addItemToCart(userId!, id),
     onSuccess: (cartItem) => {
-      addItem(cartItem);
+      queryClient.invalidateQueries({ queryKey: ["cart", userId] });
       // Show success toast or notification
       console.log("✅ Added to cart:", cartItem);
     },

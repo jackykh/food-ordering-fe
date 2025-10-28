@@ -2,7 +2,6 @@ import { useQuery } from "@tanstack/react-query";
 import { menuApi } from "../api/menu";
 import { useState, useMemo } from "react";
 import { useAuthStore } from "@/stores/useAuthStore";
-import { useCartStore } from "@/stores/useCartStore";
 import MenuItem from "@/components/MenuItem";
 import { useNavigate } from "react-router";
 import { useCart } from "@/stores/useCart";
@@ -11,8 +10,7 @@ export default function MenuPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const userName = useAuthStore((state) => state.userName);
   const navigate = useNavigate();
-  const cartItems = useCartStore((state) => state.items);
-  useCart(); // Initialize cart data
+  const { cart } = useCart();
 
   const {
     data: menuItems = [],
@@ -74,9 +72,9 @@ export default function MenuPage() {
             <div className="flex items-center gap-4">
               <button onClick={() => navigate("/cart")} className="relative">
                 <span className="text-2xl">🛒</span>
-                {cartItems.length > 0 && (
+                {cart.items.length > 0 && (
                   <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                    {cartItems.length}
+                    {cart.items.length}
                   </span>
                 )}
               </button>
