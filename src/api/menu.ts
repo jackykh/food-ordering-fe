@@ -1,5 +1,6 @@
 import axiosInstance from "@/lib/axios";
-import type { ApiResponse, MenuItem } from "@/types/menu";
+import type { MenuItem } from "@/types/menu";
+import type { ApiResponse } from "@/types/index";
 
 type MenuResponse = ApiResponse<MenuItem[]>;
 

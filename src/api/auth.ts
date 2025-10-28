@@ -1,5 +1,5 @@
 import axiosInstance from "@/lib/axios";
-import type { ApiResponse } from "@/types/menu";
+import type { ApiResponse } from "@/types/index";
 
 export interface SignupRequest {
   userName: string;
