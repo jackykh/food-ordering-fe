@@ -26,10 +26,10 @@ export const cartApi = {
   },
 
   removeItemFromCart: async (userId: number, itemId: number): Promise<void> => {
-    await axiosInstance.delete(`/cart/${userId}/${itemId}`);
+    await axiosInstance.delete(`/cart_item/${userId}/${itemId}`);
   },
 
-  clearCart: async (userId: number): Promise<void> => {
-    await axiosInstance.delete(`/cart/${userId}`);
-  },
+  // clearCart: async (userId: number): Promise<void> => {
+  //   await axiosInstance.delete(`/cart_item/${userId}`);
+  // },
 };

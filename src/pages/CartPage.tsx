@@ -1,44 +1,26 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { useCartStore } from "../stores/useCartStore";
 import { useAuthStore } from "../stores/useAuthStore";
 import { ordersApi } from "@/api/orders";
 import { cartApi } from "@/api/cart";
 import type { CartItem } from "@/types/cart";
+import { useCart } from "@/stores/useCart";
 
 export default function CartPage() {
   const navigate = useNavigate();
+  const { isLoading, error, refetchCart } = useCart();
   const cartItems = useCartStore((state) => state.items);
   const getTotalPrice = useCartStore((state) => state.getTotalPrice);
   const updateQuantity = useCartStore((state) => state.updateQuantity);
   const clearCart = useCartStore((state) => state.clearCart);
-  const setItems = useCartStore((state) => state.setItems);
   const userId = useAuthStore((state) => state.userId);
 
   const [fulfillmentType, setFulfillmentType] = useState<
     "dine-in" | "takeaway"
   >("dine-in");
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
-
-  // Get cart data
-  const {
-    data: cart,
-    isLoading,
-    error,
-    refetch: refetchCart,
-  } = useQuery({
-    queryKey: ["cart", userId],
-    queryFn: () => cartApi.getCart(userId!),
-    enabled: !!userId,
-  });
-
-  // When cart data is successfully loaded, update store
-  useEffect(() => {
-    if (cart?.items) {
-      setItems(cart.items);
-    }
-  }, [cart, setItems]);
 
   // Add to cart mutation
   const { mutate: addToCart, isPending: isAdding } = useMutation({

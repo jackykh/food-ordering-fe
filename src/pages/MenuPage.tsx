@@ -5,12 +5,14 @@ import { useAuthStore } from "@/stores/useAuthStore";
 import { useCartStore } from "@/stores/useCartStore";
 import MenuItem from "@/components/MenuItem";
 import { useNavigate } from "react-router";
+import { useCart } from "@/stores/useCart";
 
 export default function MenuPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const userName = useAuthStore((state) => state.userName);
   const navigate = useNavigate();
   const cartItems = useCartStore((state) => state.items);
+  useCart(); // Initialize cart data
 
   const {
     data: menuItems = [],
