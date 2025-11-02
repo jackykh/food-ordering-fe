@@ -298,7 +298,7 @@ export default function CartPage() {
 
         {/* Confirmation Dialog */}
         {showConfirmDialog && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
             <div className="bg-white rounded-lg p-6 max-w-sm">
               <h2 className="text-xl font-bold text-gray-800 mb-4">
                 Confirm Order
