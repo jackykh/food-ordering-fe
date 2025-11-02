@@ -5,24 +5,29 @@ import axiosInstance from "@/lib/axios";
 export interface CreateOrderRequest {
   user_id: number;
   items: Array<{
-    item_id: number;
+    menuId: number;
     quantity: number;
   }>;
-  fulfillment_type: "dine-in" | "takeaway";
+  fulfillment_type: "dine-in" | "pickup" | "delivery";
 }
 
 export const ordersApi = {
   // Get ALL Orders
-  getOrders: async (): Promise<Order[]> => {
-    const response = await axiosInstance.get<ApiResponse<Order[]>>(`/orders/`);
+  getOrders: async (user_id: string): Promise<Order[]> => {
+    const response = await axiosInstance.get<ApiResponse<Order[]>>(
+      `/orders/${user_id}`
+    );
     return response.data.data;
   },
 
   // Create A New Order
   createOrder: async (data: CreateOrderRequest): Promise<Order> => {
     const response = await axiosInstance.post<ApiResponse<Order>>(
-      `/orders/`,
-      data
+      `/orders/${data.user_id}`,
+      { items: data.items },
+      {
+        params: { fulfillmentType: data.fulfillment_type },
+      }
     );
     return response.data.data;
   },

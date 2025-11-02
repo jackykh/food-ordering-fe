@@ -70,6 +70,9 @@ export default function MenuPage() {
               🍽️ <span className="hidden sm:inline">Restaurant Menu</span>
             </h1>
             <div className="flex items-center gap-4">
+              <button onClick={() => navigate("/orders")} className="text-2xl">
+                📋
+              </button>
               <button onClick={() => navigate("/cart")} className="relative">
                 <span className="text-2xl">🛒</span>
                 {cart.items.length > 0 && (

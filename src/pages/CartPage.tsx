@@ -14,7 +14,7 @@ export default function CartPage() {
   const userId = useAuthStore((state) => state.userId);
 
   const [fulfillmentType, setFulfillmentType] = useState<
-    "dine-in" | "takeaway"
+    "dine-in" | "pickup" | "delivery"
   >("dine-in");
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
 
@@ -63,7 +63,7 @@ export default function CartPage() {
       ordersApi.createOrder({
         user_id: userId!,
         items: cart.items.map((item) => ({
-          item_id: item.items.id,
+          menuId: item.items.id,
           quantity: item.quantity,
         })),
         fulfillment_type: fulfillmentType,
@@ -239,9 +239,7 @@ export default function CartPage() {
                     value="dine-in"
                     checked={fulfillmentType === "dine-in"}
                     onChange={(e) =>
-                      setFulfillmentType(
-                        e.target.value as "dine-in" | "takeaway"
-                      )
+                      setFulfillmentType(e.target.value as "dine-in")
                     }
                   />
                   <span>Dine In 🍽️</span>
@@ -249,15 +247,24 @@ export default function CartPage() {
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input
                     type="radio"
-                    value="takeaway"
-                    checked={fulfillmentType === "takeaway"}
+                    value="pickup"
+                    checked={fulfillmentType === "pickup"}
                     onChange={(e) =>
-                      setFulfillmentType(
-                        e.target.value as "dine-in" | "takeaway"
-                      )
+                      setFulfillmentType(e.target.value as "pickup")
                     }
                   />
-                  <span>Takeaway 📦</span>
+                  <span>Pickup 📦</span>
+                </label>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    value="delivery"
+                    checked={fulfillmentType === "delivery"}
+                    onChange={(e) =>
+                      setFulfillmentType(e.target.value as "delivery")
+                    }
+                  />
+                  <span>Delivery 🚚</span>
                 </label>
               </div>
             </div>

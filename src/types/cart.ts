@@ -22,10 +22,17 @@ export interface Cart {
 }
 
 export interface Order {
-  user_id: number;
-  item_id: number;
-  quantity: number;
-  total_price: number;
-  status: string;
-  fulfillment_type: "dine-in" | "takeaway";
+  userId: number;
+  userName: string;
+  totalPrice: number;
+  status: "pending" | "completed" | "canceled";
+  fulfillmentType: "dine-in" | "pickup" | "delivery";
+  items: {
+    name: string;
+    quantity: number;
+    price: string;
+  }[];
+  id: number;
+  createdAt: string;
+  updatedAt: string;
 }

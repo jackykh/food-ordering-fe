@@ -24,7 +24,7 @@ export default function HomePage() {
             </div>
             <button
               onClick={handleLogout}
-              className="bg-red-500 hover:bg-red-600 active:bg-red-700 text-white px-4 py-2 rounded-lg transition self-start sm:self-auto cursor-pointer"
+              className="bg-red-500 hover:bg-red-600 active:bg-red-700 text-white px-4 py-2 rounded-lg transition self-start sm:self-auto"
             >
               Logout
             </button>
@@ -40,7 +40,7 @@ export default function HomePage() {
             {/* Menu Button */}
             <button
               onClick={() => navigate("/menu")}
-              className="bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white p-6 rounded-lg transition text-center cursor-pointer"
+              className="bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white p-6 rounded-lg transition text-center"
             >
               <div className="text-4xl mb-2">🍽️</div>
               <div className="font-semibold text-lg">View Menu</div>
@@ -49,12 +49,17 @@ export default function HomePage() {
               </div>
             </button>
 
-            {/* My Orders - Coming Soon */}
-            <div className="bg-gray-200 text-gray-500 p-6 rounded-lg text-center cursor-not-allowed">
-              <div className="text-4xl mb-2">🛒</div>
+            {/* My Orders Button */}
+            <button
+              onClick={() => navigate("/orders")}
+              className="bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white p-6 rounded-lg transition text-center"
+            >
+              <div className="text-4xl mb-2">📋</div>
               <div className="font-semibold text-lg">My Orders</div>
-              <div className="text-sm opacity-75 mt-1">Coming soon...</div>
-            </div>
+              <div className="text-sm opacity-90 mt-1">
+                View your order history
+              </div>
+            </button>
           </div>
         </div>
       </div>

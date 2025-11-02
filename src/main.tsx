@@ -8,6 +8,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import "./index.css";
 import MenuPage from "./pages/MenuPage";
 import CartPage from "./pages/CartPage";
+import OrdersPage from "./pages/OrdersPage";
 
 // Mock APIs in development mode
 // if (import.meta.env.DEV) {
@@ -43,6 +44,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <CartPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/orders",
+    element: (
+      <ProtectedRoute>
+        <OrdersPage />
       </ProtectedRoute>
     ),
   },
