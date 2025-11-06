@@ -23,8 +23,8 @@ export const ordersApi = {
   // Create A New Order
   createOrder: async (data: CreateOrderRequest): Promise<Order> => {
     const response = await axiosInstance.post<ApiResponse<Order>>(
-      `/orders/${data.user_id}`,
-      { items: data.items },
+      `/orders/from_cart/${data.user_id}`,
+      { menuIds: data.items.map((item) => item.menuId) },
       {
         params: { fulfillmentType: data.fulfillment_type },
       }

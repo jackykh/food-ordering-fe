@@ -73,7 +73,7 @@ export default function AuthPage() {
 
   useEffect(() => {
     if (useAuthStore.getState().isAuthenticated) {
-      navigate("/");
+      navigate("/menu");
     }
   }, [navigate]);
 

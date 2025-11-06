@@ -71,7 +71,7 @@ export default function CartPage() {
     onSuccess: () => {
       console.log("✅ Order submitted successfully");
       refetchCart(); // Refetch Cart Data
-      navigate("/");
+      navigate("/menu");
     },
     onError: (error) => {
       console.error("❌ Failed to submit order:", error);
