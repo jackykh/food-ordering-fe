@@ -66,8 +66,9 @@ export default function MenuPage() {
         {/* Logo, User Name and Logout Button */}
         <div className="px-4 py-3">
           <div className="flex flex-row justify-between items-center">
-            <h1 className="text-xl sm:text-2xl font-bold text-gray-800">
-              🍽️ <span className="hidden sm:inline">Restaurant Menu</span>
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-800 flex items-center gap-2">
+              <img className="w-10 h-10" src="/logo1.png" />
+              <span className="hidden sm:inline">Restaurant Menu</span>
             </h1>
             <div className="flex items-center gap-4">
               <button onClick={() => navigate("/orders")} className="text-2xl">
