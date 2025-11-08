@@ -306,7 +306,7 @@ export default function CartPage() {
               <p className="text-gray-600 mb-6">
                 Fulfillment Type:{" "}
                 <span className="font-semibold capitalize">
-                  {fulfillmentType === "dine-in" ? "Dine In 🍽️" : "Takeaway 📦"}
+                  {fulfillmentType}
                 </span>
               </p>
               <p className="text-gray-600 mb-6">
