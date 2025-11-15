@@ -30,7 +30,7 @@ export const cartApi = {
     itemId: number,
     quantity: number
   ): Promise<CartItem> => {
-    const response = await axiosInstance.put<ApiResponse<CartItem>>(
+    const response = await axiosInstance.post<ApiResponse<CartItem>>(
       `/cart_item_update/${userId}/${itemId}/${quantity}`
     );
     return response.data.data;
