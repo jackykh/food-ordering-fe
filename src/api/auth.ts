@@ -1,17 +1,16 @@
 import axiosInstance from "@/lib/axios";
+import type { ApiResponse } from "@/types/index";
 
 export interface SignupRequest {
   userName: string;
 }
 
-export interface SignupResponse {
-  success: boolean;
-  message: string;
-  data: {
-    id: number;
-    name: string;
-  };
+export interface UserData {
+  id: number;
+  name: string;
 }
+
+type SignupResponse = ApiResponse<UserData>;
 
 export const authApi = {
   signup: async (data: SignupRequest): Promise<SignupResponse> => {

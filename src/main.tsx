@@ -7,12 +7,14 @@ import HomePage from "./pages/HomePage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import "./index.css";
 import MenuPage from "./pages/MenuPage";
+import CartPage from "./pages/CartPage";
+import OrdersPage from "./pages/OrdersPage";
 
 // Mock APIs in development mode
-if (import.meta.env.DEV) {
-  import("./api/mock/authApi");
-  import("./api/mock/menuApi");
-}
+// if (import.meta.env.DEV) {
+//   import("./api/mock/authApi");
+//   import("./api/mock/menuApi");
+// }
 
 const queryClient = new QueryClient();
 
@@ -34,6 +36,22 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <MenuPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/cart",
+    element: (
+      <ProtectedRoute>
+        <CartPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/orders",
+    element: (
+      <ProtectedRoute>
+        <OrdersPage />
       </ProtectedRoute>
     ),
   },

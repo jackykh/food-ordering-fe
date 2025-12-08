@@ -1,11 +1,8 @@
 import axiosInstance from "@/lib/axios";
 import type { MenuItem } from "@/types/menu";
+import type { ApiResponse } from "@/types/index";
 
-export interface MenuResponse {
-  success: boolean;
-  message: string;
-  data: MenuItem[];
-}
+type MenuResponse = ApiResponse<MenuItem[]>;
 
 export const menuApi = {
   getMenuItems: async (): Promise<MenuItem[]> => {

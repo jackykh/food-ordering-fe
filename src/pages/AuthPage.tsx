@@ -4,6 +4,7 @@ import { useNavigate } from "react-router";
 import { authApi } from "../api/auth";
 import { useAuthStore } from "../stores/useAuthStore";
 import axios from "axios";
+import { cartApi } from "../api/cart";
 
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
@@ -18,6 +19,7 @@ export default function AuthPage() {
       const { id, name } = data.data;
       setAuth(id, name);
       navigate("/menu");
+      cartApi.createCart(id);
     },
     onError: (error: unknown) => {
       if (axios.isAxiosError(error)) {
@@ -71,7 +73,7 @@ export default function AuthPage() {
 
   useEffect(() => {
     if (useAuthStore.getState().isAuthenticated) {
-      navigate("/");
+      navigate("/menu");
     }
   }, [navigate]);
 

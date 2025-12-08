@@ -1,12 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
 import { menuApi } from "../api/menu";
 import { useState, useMemo } from "react";
-import { useAuthStore } from "../stores/useAuthStore";
+import { useAuthStore } from "@/stores/useAuthStore";
 import MenuItem from "@/components/MenuItem";
+import { useNavigate } from "react-router";
+import { useCart } from "@/stores/useCart";
 
 export default function MenuPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const userName = useAuthStore((state) => state.userName);
+  const navigate = useNavigate();
+  const { cart } = useCart();
 
   const {
     data: menuItems = [],
@@ -28,6 +32,10 @@ export default function MenuPage() {
     if (selectedCategory === "All") return menuItems;
     return menuItems.filter((item) => item.category === selectedCategory);
   }, [menuItems, selectedCategory]);
+
+  const handleLogout = () => {
+    useAuthStore.getState().logout();
+  };
 
   if (isLoading) {
     return (
@@ -58,18 +66,27 @@ export default function MenuPage() {
         {/* Logo, User Name and Logout Button */}
         <div className="px-4 py-3">
           <div className="flex flex-row justify-between items-center">
-            <h1 className="text-xl sm:text-2xl font-bold text-gray-800">
-              🍽️ <span className="hidden sm:inline">Restaurant Menu</span>
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-800 flex items-center gap-2">
+              <img className="w-10 h-10" src="/logo1.png" />
+              <span className="hidden sm:inline">Restaurant Menu</span>
             </h1>
             <div className="flex items-center gap-4">
+              <button onClick={() => navigate("/orders")} className="text-2xl">
+                📋
+              </button>
+              <button onClick={() => navigate("/cart")} className="relative">
+                <span className="text-2xl">🛒</span>
+                {cart.items.length > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                    {cart.items.length}
+                  </span>
+                )}
+              </button>
               <div className="text-sm text-gray-600">
                 Welcome, <span className="font-semibold">{userName}</span>
               </div>
-              <button
-                className="cursor-pointer"
-                onClick={() => useAuthStore.getState().logout()}
-              >
-                <span className="text-sm text-orange-500 underline cursor-pointer hover:text-orange-600">
+              <button onClick={handleLogout}>
+                <span className="text-sm text-orange-500 underline hover:text-orange-600">
                   Logout
                 </span>
               </button>
